@@ -1,6 +1,5 @@
 <?php
 
-
 $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 $timeSlots = ['8:00 AM - 9:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM', '1:00 PM - 2:00 PM', '2:00 PM - 3:00 PM', '3:00 PM - 4:00 PM'];
 
@@ -11,6 +10,12 @@ function generateTimetable($courses) {
     foreach ($courses as $course) {
         $day = array_rand($GLOBALS['days']);
         $timeSlot = array_rand($GLOBALS['timeSlots']);
+
+        // Check if the slot is already occupied
+        while (isset($timetable[$day][$timeSlot])) {
+            $day = array_rand($GLOBALS['days']);
+            $timeSlot = array_rand($GLOBALS['timeSlots']);
+        }
 
         $timetable[$day][$timeSlot] = $course;
     }
@@ -40,11 +45,7 @@ foreach ($timeSlots as $timeSlot) {
     foreach ($days as $day) {
         echo "<td>";
 
-        if (isset($generatedTimetable[$day][$timeSlot])) {
-            echo $generatedTimetable[$day][$timeSlot];
-        } else {
-            echo "&nbsp;"; // Empty cell
-        }
+        echo $generatedTimetable[$day][$timeSlot] ?? "&nbsp;";
 
         echo "</td>";
     }
@@ -53,4 +54,5 @@ foreach ($timeSlots as $timeSlot) {
 }
 
 echo "</table>";
+
 ?>
